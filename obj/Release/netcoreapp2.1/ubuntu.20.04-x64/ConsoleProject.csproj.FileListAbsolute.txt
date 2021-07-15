@@ -1,0 +1,14 @@
+/home/codename/Visual_Studio_Project/ConsoleProject/bin/Release/netcoreapp2.1/ubuntu.20.04-x64/libhostpolicy.so
+/home/codename/Visual_Studio_Project/ConsoleProject/bin/Release/netcoreapp2.1/ubuntu.20.04-x64/libhostfxr.so
+/home/codename/Visual_Studio_Project/ConsoleProject/bin/Release/netcoreapp2.1/ubuntu.20.04-x64/ConsoleProject
+/home/codename/Visual_Studio_Project/ConsoleProject/bin/Release/netcoreapp2.1/ubuntu.20.04-x64/ConsoleProject.deps.json
+/home/codename/Visual_Studio_Project/ConsoleProject/bin/Release/netcoreapp2.1/ubuntu.20.04-x64/ConsoleProject.runtimeconfig.json
+/home/codename/Visual_Studio_Project/ConsoleProject/bin/Release/netcoreapp2.1/ubuntu.20.04-x64/ConsoleProject.runtimeconfig.dev.json
+/home/codename/Visual_Studio_Project/ConsoleProject/bin/Release/netcoreapp2.1/ubuntu.20.04-x64/ConsoleProject.dll
+/home/codename/Visual_Studio_Project/ConsoleProject/bin/Release/netcoreapp2.1/ubuntu.20.04-x64/ConsoleProject.pdb
+/home/codename/Visual_Studio_Project/ConsoleProject/obj/Release/netcoreapp2.1/ubuntu.20.04-x64/ConsoleProject.csprojAssemblyReference.cache
+/home/codename/Visual_Studio_Project/ConsoleProject/obj/Release/netcoreapp2.1/ubuntu.20.04-x64/ConsoleProject.csproj.CoreCompileInputs.cache
+/home/codename/Visual_Studio_Project/ConsoleProject/obj/Release/netcoreapp2.1/ubuntu.20.04-x64/ConsoleProject.AssemblyInfoInputs.cache
+/home/codename/Visual_Studio_Project/ConsoleProject/obj/Release/netcoreapp2.1/ubuntu.20.04-x64/ConsoleProject.AssemblyInfo.cs
+/home/codename/Visual_Studio_Project/ConsoleProject/obj/Release/netcoreapp2.1/ubuntu.20.04-x64/ConsoleProject.dll
+/home/codename/Visual_Studio_Project/ConsoleProject/obj/Release/netcoreapp2.1/ubuntu.20.04-x64/ConsoleProject.pdb

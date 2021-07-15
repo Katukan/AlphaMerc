@@ -1,0 +1,11 @@
+/home/codename/Visual_Studio_Project/ConsoleProject/bin/Debug/netcoreapp2.1/ConsoleProject.deps.json
+/home/codename/Visual_Studio_Project/ConsoleProject/bin/Debug/netcoreapp2.1/ConsoleProject.runtimeconfig.json
+/home/codename/Visual_Studio_Project/ConsoleProject/bin/Debug/netcoreapp2.1/ConsoleProject.runtimeconfig.dev.json
+/home/codename/Visual_Studio_Project/ConsoleProject/bin/Debug/netcoreapp2.1/ConsoleProject.dll
+/home/codename/Visual_Studio_Project/ConsoleProject/bin/Debug/netcoreapp2.1/ConsoleProject.pdb
+/home/codename/Visual_Studio_Project/ConsoleProject/obj/Debug/netcoreapp2.1/ConsoleProject.csprojAssemblyReference.cache
+/home/codename/Visual_Studio_Project/ConsoleProject/obj/Debug/netcoreapp2.1/ConsoleProject.csproj.CoreCompileInputs.cache
+/home/codename/Visual_Studio_Project/ConsoleProject/obj/Debug/netcoreapp2.1/ConsoleProject.AssemblyInfoInputs.cache
+/home/codename/Visual_Studio_Project/ConsoleProject/obj/Debug/netcoreapp2.1/ConsoleProject.AssemblyInfo.cs
+/home/codename/Visual_Studio_Project/ConsoleProject/obj/Debug/netcoreapp2.1/ConsoleProject.dll
+/home/codename/Visual_Studio_Project/ConsoleProject/obj/Debug/netcoreapp2.1/ConsoleProject.pdb
