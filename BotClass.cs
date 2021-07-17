@@ -18,59 +18,67 @@ namespace ConsoleProject {
         DateTime tomorrow;
         int todayDay, maxWord, idAccount;
 
-
+        // конструктор
         public BotClass(string driverPath, IRepository repo) {
             driver = new ChromeDriver(driverPath);
             repository = repo;
             todayDay = DateTime.Now.Day;
         }
 
-        // вспомогательные методы
+    // вспомогательные методы
         private IWebElement FindElement(string xPath) {
             return driver.FindElement(By.XPath(xPath));
         }
 
+        // окрашиваем надпись в зеленый
         private void GreenConsoleOutput(string str) {
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine(str);
             Console.ForegroundColor = ConsoleColor.Gray;
         }
 
+        // окрашиваем надпись в желтый
         private void YellowConsoleOutput(string str) {
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine(str);
             Console.ForegroundColor = ConsoleColor.Gray;
         }
 
+        // окрашиваем надпись в красный
         private void RedConsoleOutput(string str) {
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine(str);
             Console.ForegroundColor = ConsoleColor.Gray;
         }
 
+        // меняет день 
         private void ChangeDay(IWebElement dayInput, int day) {
             dayInput.Clear();
             dayInput.SendKeys(day.ToString());
         }
 
+        // менят месяц
         private void ChangeMonth(SelectElement selectElement, int month) {
-            selectElement.SelectByValue((--month).ToString());
+            selectElement.SelectByValue((--month).ToString());  // декреминтируем 'month', чтобы соответсвовала индексу JavaScript
         }
 
+        // сравниваем имя пользователя
         private bool CheckDoctorName(string doctorIdName) {
             return FindElement("//div[@id='loggedas']/b").Text.Contains(doctorIdName);
         }
 
+        // выводим молокосборщиков
         private void ShowMilkmen(IList<Milkman> milkmen, bool isYellow = false) {
-            if(isYellow) 
+            if(isYellow)  
                 Console.ForegroundColor = ConsoleColor.Yellow;
             for(int i = 0; i < milkmen.Count(); i++) {
-                Console.WriteLine($"{i+1}) {milkmen[i].Name} {milkmen[i].DoctorIDName}");
+                Console.WriteLine($"{i+1}) {milkmen[i].Name} ");
             }
             if(isYellow) 
                 Console.ForegroundColor = ConsoleColor.Gray;
         }
 
+        // выводим пользователей
         private void ShowAccounts(IList<DoctorAccount> accounts) {
             Console.WriteLine("Доступные аккаунты:");
             foreach(var account in accounts) {
@@ -79,8 +87,9 @@ namespace ConsoleProject {
         }
 
 
-        // основные методы
+    // основные методы
 
+        // начало
         public void Start() {
             try {
                 OpenSite(); 
@@ -93,14 +102,17 @@ namespace ConsoleProject {
                 }else {
                     RedConsoleOutput(ex.Message);
                 }
-                
+                driver.Close();
+                driver.Quit();
             }
         }
 
+        // заходим на сайт
         private void OpenSite() {
             driver.Navigate().GoToUrl("http://mercury.vetrf.ru/gve");
         }
 
+        // получаем нужного пользователя и заходим в систему "Меркурий ГВЭ"
         private void EnterSite() {
             IList<DoctorAccount> doctorAccounts = repository.GetDoctorAccounts();
             ShowAccounts(doctorAccounts);
@@ -112,6 +124,7 @@ namespace ConsoleProject {
             Authorization(doctorAccount.Login, doctorAccount.Password);
         }
 
+        // Авторизация
         private void Authorization(string login, string password) {
             try {
                 FindElement("//input[@id='username']").SendKeys(login); // логин
@@ -125,6 +138,7 @@ namespace ConsoleProject {
             }
         }
 
+        // оформление ВСД через шаблон для одного пользователя
         private void PaperWork(Milkman milkman) {
             try {
                 FindElement($"//input[@value='{milkman.RuNumber}']").Click();   // находим площадку по номеру RU
@@ -151,7 +165,7 @@ namespace ConsoleProject {
                 ChangeMonth(selectElement, tomorrow.Month);
 
                 FindElement("//button[@class='positive']").Click(); // сохранить
-                Thread.Sleep(2000);
+                Thread.Sleep(1500);
                 FindElement("//button[@onclick='javascript:doAction(\"transactionShowForm\", \"generateTransactionFromTemplate\", \"\")']").Click(); // создать транзакцию
                 //FindElement("//button[@class='positive']").Click(); // оформить
                 //driver.SwitchTo().Alert().Accept(); // подтверждение
@@ -166,6 +180,7 @@ namespace ConsoleProject {
 
         }
         
+        // оформление ВСД для нескольких пользователей
         private void MainProcess() {
             IList<Milkman> allMilkmen = repository.GetMilkmen().Where(m => CheckDoctorName(m.DoctorIDName)).ToList();   
             IList<Milkman> milkmen = allMilkmen.Where(m => m.Exclud != 1).ToList();
@@ -184,7 +199,15 @@ namespace ConsoleProject {
             foreach(var milkman in milkmen) {
                 PaperWork(milkman);
             }
-            
+        }
+
+        // остановка, и закрытия окон
+        public void Stop() {
+            Thread.Sleep(1500);
+            Console.WriteLine("Программа завершил оформление.\n Нажите на Enter, чтобы выйти");
+            Console.ReadLine();
+            driver.Close();
+            driver.Quit();
         }
     }
 }

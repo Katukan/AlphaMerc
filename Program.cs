@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 
 namespace ConsoleProject {
-    class Program {
+    public class Program {
 
         static void Main(string[] args) {
             using(var db = new DatabaseContext()){
@@ -16,8 +16,23 @@ namespace ConsoleProject {
             }
             Repository repository = new Repository();
             BotClass botClass = new BotClass("/home/codename/Visual_Studio_Project/ConsoleProject", repository);
-            Console.WriteLine("AlphaMerc");
+            ShowLogo();
             botClass.Start();
+            botClass.Stop();
+        }
+
+        private static void ShowLogo() {
+            Console.Write(@"
+          _       _           __  __               
+    /\   | |     | |         |  \/  |              
+   /  \  | |_ __ | |__   __ _| \  / | ___ _ __ ___ 
+  / /\ \ | | '_ \| '_ \ / _` | |\/| |/ _ \ '__/ __|
+ / ____ \| | |_) | | | | (_| | |  | |  __/ | | (__ 
+/_/    \_\_| .__/|_| |_|\__,_|_|  |_|\___|_|  \___|
+           | |                                     
+           |_|                                                
+                         
+            ");
         }
     }
 }
