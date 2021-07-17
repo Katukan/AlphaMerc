@@ -16,8 +16,8 @@ namespace ConsoleProject {
         IWebElement dayInput;
         SelectElement selectElement;
         DateTime tomorrow;
-        int todayDay;
-        int maxWord;
+        int todayDay, maxWord, idAccount;
+
 
         public BotClass(string driverPath, IRepository repo) {
             driver = new ChromeDriver(driverPath);
@@ -80,16 +80,35 @@ namespace ConsoleProject {
 
 
         // основные методы
-        public void OpenSite() {
+
+        public void Start() {
+            try {
+                OpenSite(); 
+                EnterSite();
+                MainProcess();
+            }
+            catch(Exception ex) {
+                if(ex.Message.Contains("ERR_INTERNET")) {
+                    RedConsoleOutput("Проблема с интернетом");
+                }else {
+                    RedConsoleOutput(ex.Message);
+                }
+                
+            }
+        }
+
+        private void OpenSite() {
             driver.Navigate().GoToUrl("http://mercury.vetrf.ru/gve");
         }
 
-        public void EnterSite() {
+        private void EnterSite() {
             IList<DoctorAccount> doctorAccounts = repository.GetDoctorAccounts();
             ShowAccounts(doctorAccounts);
             Console.WriteLine("Введите ID пользователя и нажмите Enter");
-            int idAccount = Int32.Parse(Console.ReadLine());
-            DoctorAccount doctorAccount = repository.GetDoctorAccounts().First(d => d.Id == idAccount);
+            while(!Int32.TryParse(Console.ReadLine(), out idAccount) || doctorAccounts.All(d => d.Id != idAccount)) {
+              RedConsoleOutput("Неккоректный ID, введите заново");
+            }
+            DoctorAccount doctorAccount = doctorAccounts.First(d => d.Id == idAccount);
             Authorization(doctorAccount.Login, doctorAccount.Password);
         }
 
@@ -147,13 +166,17 @@ namespace ConsoleProject {
 
         }
         
-        public void MainProcess() {
-            IList<Milkman> milkmen = repository.GetMilkmen().Where(m => CheckDoctorName(m.DoctorIDName) && m.Exclud != 1).ToList();
+        private void MainProcess() {
+            IList<Milkman> allMilkmen = repository.GetMilkmen().Where(m => CheckDoctorName(m.DoctorIDName)).ToList();   
+            IList<Milkman> milkmen = allMilkmen.Where(m => m.Exclud != 1).ToList();
             maxWord = milkmen.Select(m => m.Name.Length).ToArray().Max();
             ShowMilkmen(((IList<Milkman>)milkmen));
-            YellowConsoleOutput(new string('-', maxWord + 5));
-            YellowConsoleOutput("Следующие ЛПХ не будут оформляться:");
-            ShowMilkmen(repository.GetMilkmen().Where(m => m.Exclud == 1).ToList(), true);
+            Console.WriteLine(new string('-', maxWord + 5));
+            IList<Milkman> ExcludMilkmen = allMilkmen.Where(m => m.Exclud == 1).ToList();
+            if(ExcludMilkmen.Count() > 0) {
+                YellowConsoleOutput("Следующие ЛПХ не будут оформляться:");
+                ShowMilkmen(ExcludMilkmen, true);
+            }
             Console.WriteLine("Нажмите Enter, чтобы оформить");
             Console.ReadLine();
             Console.WriteLine(" Name " + new string(' ', maxWord) + "Status");
