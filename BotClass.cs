@@ -102,8 +102,9 @@ namespace ConsoleProject {
                 }else {
                     RedConsoleOutput(ex.Message);
                 }
-                driver.Close();
-                driver.Quit();
+            }
+            finally {
+                Stop();
             }
         }
 
@@ -115,13 +116,17 @@ namespace ConsoleProject {
         // получаем нужного пользователя и заходим в систему "Меркурий ГВЭ"
         private void EnterSite() {
             IList<DoctorAccount> doctorAccounts = repository.GetDoctorAccounts();
+            if(doctorAccounts.Count() == 0) {
+                throw new Exception("Отсутвуют данные об аккаунтах");
+            }
             ShowAccounts(doctorAccounts);
             Console.WriteLine("Введите ID пользователя и нажмите Enter");
             while(!Int32.TryParse(Console.ReadLine(), out idAccount) || doctorAccounts.All(d => d.Id != idAccount)) {
-              RedConsoleOutput("Неккоректный ID, введите заново");
+                RedConsoleOutput("Неккоректный ID, введите заново");
             }
             DoctorAccount doctorAccount = doctorAccounts.First(d => d.Id == idAccount);
             Authorization(doctorAccount.Login, doctorAccount.Password);
+            
         }
 
         // Авторизация
@@ -182,8 +187,11 @@ namespace ConsoleProject {
         
         // оформление ВСД для нескольких пользователей
         private void MainProcess() {
-            IList<Milkman> allMilkmen = repository.GetMilkmen().Where(m => CheckDoctorName(m.DoctorIDName)).ToList();   
+            IList<Milkman> allMilkmen = repository.GetMilkmen().Where(m => CheckDoctorName(m.DoctorIDName)).ToList();  
             IList<Milkman> milkmen = allMilkmen.Where(m => m.Exclud != 1).ToList();
+            if(milkmen.Count() == 0) {
+                throw new Exception("Данные молочников отсутствуют");
+            }
             maxWord = milkmen.Select(m => m.Name.Length).ToArray().Max();
             ShowMilkmen(((IList<Milkman>)milkmen));
             Console.WriteLine(new string('-', maxWord + 5));
@@ -203,11 +211,11 @@ namespace ConsoleProject {
 
         // остановка, и закрытия окон
         public void Stop() {
-            Thread.Sleep(1500);
-            Console.WriteLine("Программа завершил оформление.\n Нажите на Enter, чтобы выйти");
+            Console.WriteLine("Программа завершилась.\n Нажите на Enter, чтобы выйти");
             Console.ReadLine();
             driver.Close();
             driver.Quit();
+            Thread.Sleep(1500);
         }
     }
 }

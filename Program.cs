@@ -5,6 +5,7 @@ using System.Threading;
 using OpenQA.Selenium.Support.UI;
 using ConsoleProject.Models;
 using Microsoft.EntityFrameworkCore;
+using System.IO;
 
 
 namespace ConsoleProject {
@@ -15,10 +16,9 @@ namespace ConsoleProject {
                 db.Database.Migrate();
             }
             Repository repository = new Repository();
-            BotClass botClass = new BotClass("/home/codename/Visual_Studio_Project/ConsoleProject", repository);
+            BotClass botClass = new BotClass(Directory.GetCurrentDirectory(), repository);
             ShowLogo();
             botClass.Start();
-            botClass.Stop();
         }
 
         private static void ShowLogo() {
