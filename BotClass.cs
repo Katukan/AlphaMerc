@@ -12,14 +12,16 @@ namespace ConsoleProject {
 
     public class BotClass {
 
-        IRepository repository;
-        IWebDriver driver;
-        SelectElement selectElement;
-        DateTime tomorrow;
+        private IRepository repository;
+        private IWebDriver chromeDriver;
 
-        public BotClass(string driverPath, IRepository repo) {
-            driver = new ChromeDriver(driverPath);
-            repository = repo;
+        private const string SITE_NAME = "http://mercury.vetrf.ru/gve";
+
+
+        private BotClass() { }
+
+        public static BotClass BotClassFactory (string driverPath, IRepository repository) {
+            return new BotClass { chromeDriver = new ChromeDriver(driverPath), repository = repository };
         }
 
 
@@ -30,7 +32,8 @@ namespace ConsoleProject {
                 MainProcess();
             }
             catch(Exception ex) {
-                if(ex.Message.Contains("ERR_INTERNET")) {
+                bool isInternetError = ex.Message.Contains("ERR_INTERNET");
+                if(isInternetError) {
                     ConsoleTextColor.RedConsoleOutput("Проблема с интернетом");
 
                 }else {
@@ -43,7 +46,7 @@ namespace ConsoleProject {
         }
 
         private void OpenSite() {
-            driver.Navigate().GoToUrl("http://mercury.vetrf.ru/gve");
+            chromeDriver.Navigate().GoToUrl(SITE_NAME);
         }
 
         private void InitialSettings() {
@@ -54,8 +57,8 @@ namespace ConsoleProject {
             ShowAccounts(doctorAccounts);
             Console.WriteLine("Введите ID пользователя и нажмите Enter");
             int idAccount;
-            bool isCorrectIdAccount = !Int32.TryParse(Console.ReadLine(), out idAccount) || doctorAccounts.All(d => d.Id != idAccount);
-            while(isCorrectIdAccount) {
+            bool isCorrectIdAccount = Int32.TryParse(Console.ReadLine(), out idAccount) || doctorAccounts.All(d => d.Id != idAccount);
+            while(!isCorrectIdAccount) {
                 ConsoleTextColor.RedConsoleOutput("Неккоректный ID, введите заново");
             }
             DoctorAccount doctorAccount = doctorAccounts.First(d => d.Id == idAccount);
@@ -90,8 +93,8 @@ namespace ConsoleProject {
         public void Stop() {
             Console.WriteLine("Программа завершилась.\n Нажите на Enter, чтобы выйти");
             Console.ReadLine();
-            driver.Close();
-            driver.Quit();
+            chromeDriver.Close();
+            chromeDriver.Quit();
             Thread.Sleep(1500);
         }
 
@@ -146,21 +149,21 @@ namespace ConsoleProject {
                 IWebElement dayInputElement =  FindElement("//table[@class='innerForm']/tbody/tr[@id='PRODUCTION_DATE']/td/div/span/input[@type='text']");   // день выработки
                 int todayDay = DateTime.Now.Day;
                 ChangeDay(dayInputElement, todayDay);
-                selectElement = new SelectElement(FindElement("//tr[@id='PRODUCTION_DATE']/td/div/span/select[@class='middle']")); // месяц выработки
-                ChangeMonth(selectElement, DateTime.Now.Month);
+                SelectElement monthSelectElement = new SelectElement(FindElement("//tr[@id='PRODUCTION_DATE']/td/div/span/select[@class='middle']")); // месяц выработки
+                ChangeMonth(monthSelectElement, DateTime.Now.Month);
 
                 // дата срока годности
-                tomorrow = DateTime.Today.AddDays(1);
+                DateTime tomorrowDay = DateTime.Today.AddDays(1);
                 dayInputElement =  FindElement("//table[@class='innerForm']/tbody/tr[@id='BEST_BEFORE_DATE']/td/div/span/input[@type='text']");   // день просрочки
-                ChangeDay(dayInputElement, tomorrow.Day);
-                selectElement = new SelectElement(FindElement("//tr[@id='BEST_BEFORE_DATE']/td/div/span/select[@class='middle']")); // месяц просрочки
-                ChangeMonth(selectElement, tomorrow.Month);
+                ChangeDay(dayInputElement, tomorrowDay.Day);
+                monthSelectElement = new SelectElement(FindElement("//tr[@id='BEST_BEFORE_DATE']/td/div/span/select[@class='middle']")); // месяц просрочки
+                ChangeMonth(monthSelectElement, tomorrowDay.Month);
 
                 FindElement("//button[@class='positive']").Click(); // сохранить
                 Thread.Sleep(1500);
                 FindElement("//button[@onclick='javascript:doAction(\"transactionShowForm\", \"generateTransactionFromTemplate\", \"\")']").Click(); // создать транзакцию
-                //FindElement("//button[@class='positive']").Click(); // оформить
-                //driver.SwitchTo().Alert().Accept(); // подтверждение
+                FindElement("//button[@class='positive']").Click(); // оформить
+                chromeDriver.SwitchTo().Alert().Accept(); // подтверждение
                 ConsoleTextColor.GreenConsoleOutput(milkman.Name + new string(' ', maxWord+5-milkman.Name.Length) + " успех");
             }
             catch {
@@ -174,12 +177,12 @@ namespace ConsoleProject {
 
 
         private IWebElement FindElement(string xPath) {
-            return driver.FindElement(By.XPath(xPath));
+            return chromeDriver.FindElement(By.XPath(xPath));
         }
 
-        private void ChangeDay(IWebElement dayInput, int day) {
-            dayInput.Clear();
-            dayInput.SendKeys(day.ToString());
+        private void ChangeDay(IWebElement dayInputElement, int day) {
+            dayInputElement.Clear();
+            dayInputElement.SendKeys(day.ToString());
         }
 
         private void ChangeMonth(SelectElement selectElement, int month) {

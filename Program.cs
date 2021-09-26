@@ -16,7 +16,7 @@ namespace ConsoleProject {
                 db.Database.Migrate();
             }
             Repository repository = new Repository();
-            BotClass botClass = new BotClass(Directory.GetCurrentDirectory(), repository);
+            BotClass botClass = BotClass.BotClassFactory(Directory.GetCurrentDirectory(), repository);
             ShowLogo();
             botClass.Start();
         }
