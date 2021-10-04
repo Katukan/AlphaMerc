@@ -9,7 +9,7 @@ namespace ConsoleProject.Models {
         public string Name { get; set; }
         public string RuNumber { get; set; }
 
-        public string DoctorIDName { get; set; }
+        public string DoctorIdName { get; set; }
         public int Exclud { get; set; }
 
     }
