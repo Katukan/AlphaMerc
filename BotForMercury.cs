@@ -119,9 +119,6 @@ namespace ConsoleProject {
             allMilkmen = repository.GetMilkmen().Where(m => CheckingDoctorName(m.DoctorIdName)).ToList();  
             includedMilkmen = allMilkmen.Where(m => m.Exclud != 1).ToList();
             excludMilkmen = allMilkmen.Where(m => m.Exclud == 1).ToList();
-            foreach(var a in excludMilkmen) {
-                Console.WriteLine($"{a.Name} - {a.Exclud}");
-            }
         }
 
         private bool CheckingDoctorName(string doctorIdName) {
