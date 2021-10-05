@@ -12,21 +12,20 @@ namespace ConsoleProject {
 
         private IRepository repository;
         private IWebDriver browserDriver;
+        BotSettings botSettings;
         IList<DoctorAccount> doctorAccounts;
         int idDoctorAccount = 0;
         IList<Milkman> allMilkmen;
         IList<Milkman> includedMilkmen;
         IList<Milkman> excludMilkmen;
 
-        private const int millisecondsTimeout = 1500;
-        private const string siteName = "http://mercury.vetrf.ru/gve";
-
         private BotForMercury() { }
 
-        public static BotForMercury RenderBotForMercury(IRepository repository, IWebDriver browserDriver) {
+        public static BotForMercury RenderBotForMercury(IRepository repository, IWebDriver browserDriver, BotSettings botSettings) {
             return new BotForMercury { 
                 repository = repository,
-                browserDriver = browserDriver
+                browserDriver = browserDriver,
+                botSettings = botSettings
             };
         }
 
@@ -37,7 +36,7 @@ namespace ConsoleProject {
         }
 
         private void OpenSite() {
-            browserDriver.Navigate().GoToUrl(siteName);
+            browserDriver.Navigate().GoToUrl(botSettings.siteName);
         }
 
         private void InitialSettings() {
@@ -68,7 +67,7 @@ namespace ConsoleProject {
             bool isNumber = Int32.TryParse(idAccountFromConsole, out idDoctorAccount);
             bool doctorAccountsHaveNotThisId = doctorAccounts.All(d => d.Id != idDoctorAccount);
             while(!isNumber || doctorAccountsHaveNotThisId) {
-                ConsoleTextColor.RedConsoleOutput("Неккоректный ID, введите заново");
+                ConsoleTextColor.ColoringInRed("Неккоректный ID, введите заново");
                 idAccountFromConsole = Console.ReadLine();
                 isNumber = Int32.TryParse(idAccountFromConsole, out idDoctorAccount);
                 doctorAccountsHaveNotThisId = doctorAccounts.All(d => d.Id != idDoctorAccount);
@@ -84,17 +83,17 @@ namespace ConsoleProject {
                 SubmittingAuthorizationForm(login, password);
                 Console.WriteLine("Подождите полной загрузки страницы и нажмите Enter");
                 Console.ReadLine();
-                string accountNameFromSite = FindElementByXpath("//div[@id='loggedas']/b").Text;
-                ConsoleTextColor.GreenConsoleOutput("Вы успешно зашли: " + accountNameFromSite);
+                string accountNameFromSite = FindElementByXpath(botSettings.accountNameFromSiteXpath).Text; 
+                ConsoleTextColor.ColoringInGreen("Вы успешно зашли: " + accountNameFromSite);
             }catch {
                 throw new Exception("Не удалось войти в систему");
             }
         }
 
         private void SubmittingAuthorizationForm(string login, string password) {
-            FindElementByXpath("//input[@id='username']").SendKeys(login);
-            FindElementByXpath("//input[@id='password']").SendKeys(password);
-            FindElementByXpathAndClick("//button[@type='submit']");
+            FindElementByXpath(botSettings.userNameInputElementXpath).SendKeys(login);
+            FindElementByXpath(botSettings.passwordInputElementXpath).SendKeys(password);
+            FindElementByXpathAndClick(botSettings.authorizationSubmitButtonXpath);
         }
 
         private IWebElement FindElementByXpath(string xPath) {
@@ -108,7 +107,7 @@ namespace ConsoleProject {
         private void MainProcess() {
             InitializationMilkmen();
             CheckingCountIncludedMilkmen();
-            ShowMilkmen();
+            ShowMilkmen(includedMilkmen);
             DrawLine();
             ShowExcludMilkmen();
             Console.WriteLine("Нажмите Enter, чтобы оформить");
@@ -120,10 +119,13 @@ namespace ConsoleProject {
             allMilkmen = repository.GetMilkmen().Where(m => CheckingDoctorName(m.DoctorIdName)).ToList();  
             includedMilkmen = allMilkmen.Where(m => m.Exclud != 1).ToList();
             excludMilkmen = allMilkmen.Where(m => m.Exclud == 1).ToList();
+            foreach(var a in excludMilkmen) {
+                Console.WriteLine($"{a.Name} - {a.Exclud}");
+            }
         }
 
         private bool CheckingDoctorName(string doctorIdName) {
-            return FindElementByXpath("//div[@id='loggedas']/b").Text.Contains(doctorIdName);
+            return FindElementByXpath(botSettings.accountNameFromSiteXpath).Text.Contains(doctorIdName);
         }
 
         private void CheckingCountIncludedMilkmen() {
@@ -132,14 +134,16 @@ namespace ConsoleProject {
             }
         }
 
-        private void ShowMilkmen(bool isYellowConsoleText = false) {
-            if(isYellowConsoleText)  
-                Console.ForegroundColor = ConsoleColor.Yellow;
-            for(int i = 0; i < includedMilkmen.Count(); i++) {
-                Console.WriteLine($"{i + 1}) {includedMilkmen[i].Name} ");
+        private void ShowMilkmen(IList<Milkman> milkmen, bool isYellowConsoleText = false) {
+            if(isYellowConsoleText) {
+                ConsoleTextColor.ColoringGrayToYellow();
             }
-            if(isYellowConsoleText) 
-                Console.ForegroundColor = ConsoleColor.Gray;
+            for(int i = 0; i < milkmen.Count(); i++) {
+                Console.WriteLine($"{i + 1}) {milkmen[i].Name} ");
+            }
+            if(isYellowConsoleText) {
+                ConsoleTextColor.ColoringYellowToGray();
+            }
         }
 
         private void DrawLine() {
@@ -153,8 +157,8 @@ namespace ConsoleProject {
 
         private void ShowExcludMilkmen() {
             if(excludMilkmen.Count() > 0) {
-                ConsoleTextColor.YellowConsoleOutput("Следующие ЛПХ не будут оформляться:");
-                ShowMilkmen(true);
+                ConsoleTextColor.ColoringInYellow("Следующие ЛПХ не будут оформляться:");
+                ShowMilkmen(excludMilkmen, true);
             }
         }
 
@@ -178,7 +182,7 @@ namespace ConsoleProject {
                 FindReadyTemplateInHtmlPage();
                 ChangeProductionDate();
                 ChangeExpirationDate();
-                FindElementByXpathAndClick("//button[@class='positive']"); // сохранить
+                SaveTemplate();
                 ConfirmDocument();
                 ShowSuccesfulStatus(milkman, longestMilkmanName);
             }
@@ -191,24 +195,24 @@ namespace ConsoleProject {
         }
 
         private void FindMilkmanInHtmlPage(Milkman milkman) {
-            FindElementByXpathAndClick($"//input[@value='{milkman.RuNumber}']");   // находим площадку по номеру RU
-            FindElementByXpathAndClick("//button[@type='submit']");    // нажимаем выбрать
+            FindElementByXpathAndClick(String.Format(botSettings.milkmanInHtmlPageXpath, milkman.RuNumber));
+            FindElementByXpathAndClick(botSettings.milkmanSelectonButtonXpath);
         }
 
         private void FindReadyTemplateInHtmlPage() {
-            FindElementByXpathAndClick("//a[@href='operatorui?_action=listTransaction&formed=false&pageList=1&all=true&preview=true']"); // кнопка транзакция
-            FindElementByXpathAndClick("//a[@href='javascript:onEnterMenu(true, \"\", false);']"); // шаблоны
-            Thread.Sleep(millisecondsTimeout);
-            FindElementByXpathAndClick("//tr[@class='first']/td[@class='control']"); // лупа
-            FindElementByXpathAndClick("//a[@class='operation-link blue']"); // редактировать продукцию
-            Thread.Sleep(millisecondsTimeout);
+            FindElementByXpathAndClick(botSettings.transactionButtonXpath);
+            FindElementByXpathAndClick(botSettings.templateButtonXpath);
+            Thread.Sleep(botSettings.millisecondsTimeout);
+            FindElementByXpathAndClick(botSettings.magniferImageButtonXpath);
+            FindElementByXpathAndClick(botSettings.editProductButtonXpath);
+            Thread.Sleep(botSettings.millisecondsTimeout);
         }
 
         private void ChangeProductionDate() {
-            IWebElement productionDayInputElement =  FindElementByXpath("//table[@class='innerForm']/tbody/tr[@id='PRODUCTION_DATE']/td/div/span/input[@type='text']");   // день выработки
+            IWebElement productionDayInputElement =  FindElementByXpath(botSettings.productionDayXpath);
             int todayDay = DateTime.Now.Day;
             ChangeDay(productionDayInputElement, todayDay);
-            SelectElement productionMonthSelectElement = new SelectElement(FindElementByXpath("//tr[@id='PRODUCTION_DATE']/td/div/span/select[@class='middle']")); // месяц выработки
+            SelectElement productionMonthSelectElement = new SelectElement(FindElementByXpath(botSettings.productionMonthXpath));
             ChangeMonth(productionMonthSelectElement, DateTime.Now.Month);
         }
 
@@ -218,24 +222,29 @@ namespace ConsoleProject {
         }
 
         private void ChangeMonth(SelectElement selectElement, int month) {
-            selectElement.SelectByValue((--month).ToString());  // декреминтируем 'month', чтобы соответсвовала индексу JavaScript
+            int monthIndexInJavaScript = --month; 
+            selectElement.SelectByValue((monthIndexInJavaScript).ToString());  
         }
 
         private void ChangeExpirationDate() {
             DateTime tomorrowDay = DateTime.Today.AddDays(1);
-            IWebElement expirationDayInputElement =  FindElementByXpath("//table[@class='innerForm']/tbody/tr[@id='BEST_BEFORE_DATE']/td/div/span/input[@type='text']");   // день просрочки
+            IWebElement expirationDayInputElement =  FindElementByXpath(botSettings.expirationDayXpath);
             ChangeDay(expirationDayInputElement, tomorrowDay.Day);
-            SelectElement expirationMonthSelectElement = new SelectElement(FindElementByXpath("//tr[@id='BEST_BEFORE_DATE']/td/div/span/select[@class='middle']")); // месяц просрочки
+            SelectElement expirationMonthSelectElement = new SelectElement(FindElementByXpath(botSettings.expirationMonthXpath));
             ChangeMonth(expirationMonthSelectElement, tomorrowDay.Month);
         }
 
+        private void SaveTemplate() {
+            FindElementByXpathAndClick(botSettings.saveTemplateButton);
+        }
+
         private void ConfirmDocument() {
-            Thread.Sleep(millisecondsTimeout);
-            FindElementByXpathAndClick("//table[@class='form']/tbody/tr/td[@class='control']/div/button[3]"); // создать транзакцию
-            Thread.Sleep(millisecondsTimeout);
-            FindElementByXpathAndClick("//button[@class='positive']"); // оформить
-            Thread.Sleep(millisecondsTimeout);
-            AcceptJavaScriptAlert(); // подтверждение
+            Thread.Sleep(botSettings.millisecondsTimeout);
+            FindElementByXpathAndClick(botSettings.createTransactionButtonXpath);
+            Thread.Sleep(botSettings.millisecondsTimeout);
+            FindElementByXpathAndClick(botSettings.formalizeButtonXpath);
+            Thread.Sleep(botSettings.millisecondsTimeout);
+            AcceptJavaScriptAlert();
         }
 
         private void AcceptJavaScriptAlert() {
@@ -243,16 +252,16 @@ namespace ConsoleProject {
         }
 
         private void ShowSuccesfulStatus(Milkman milkman, int longestMilkmanName) {
-            ConsoleTextColor.GreenConsoleOutput(milkman.Name + new string(' ', longestMilkmanName+5-milkman.Name.Length) + " успех");
+            ConsoleTextColor.ColoringInGreen(milkman.Name + new string(' ', longestMilkmanName+5-milkman.Name.Length) + " успех");
         }
 
         private void ShowErrorStatus(Milkman milkman, int longestMilkmanName) {
-            ConsoleTextColor.RedConsoleOutput(milkman.Name + new string(' ', longestMilkmanName+5-milkman.Name.Length) +" ошибка");
+            ConsoleTextColor.ColoringInRed(milkman.Name + new string(' ', longestMilkmanName+5-milkman.Name.Length) +" ошибка");
         }
         
         private void ShowMilkmenListInHtmlPage() {
-            Thread.Sleep(millisecondsTimeout);
-            FindElementByXpath("//a[@href='operatorui?_action=changeServicedEnterprise']").Click();
+            Thread.Sleep(botSettings.millisecondsTimeout);
+            FindElementByXpathAndClick(botSettings.changeServicedEnterpriseLink);
         }
 
          public void Stop() {
@@ -260,7 +269,7 @@ namespace ConsoleProject {
             Console.ReadLine();
             browserDriver.Close();
             browserDriver.Quit();
-            Thread.Sleep(millisecondsTimeout);
+            Thread.Sleep(botSettings.millisecondsTimeout);
         }
     }
 }

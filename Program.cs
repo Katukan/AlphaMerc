@@ -1,26 +1,26 @@
 ﻿using System;
-using OpenQA.Selenium.Chrome;
-using OpenQA.Selenium;
-using ConsoleProject.Models;
 using Microsoft.EntityFrameworkCore;
+using ConsoleProject.Models;
+using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
 using System.IO;
-
+using System.Text.Json;
+using System.Text;
 
 namespace ConsoleProject {
     public class Program {
         static IRepository repository;
-        static BotForMercury botForMercury;
         static IWebDriver chromeDriver;
-
-        static Program() {
-            repository = new Repository();
-            chromeDriver = new ChromeDriver(Directory.GetCurrentDirectory());
-            botForMercury = BotForMercury.RenderBotForMercury(repository, chromeDriver);
-        }
+        static BotSettings botSettings;
+        static BotForMercury botForMercury;
 
         static void Main(string[] args) {
             try {
                 DatabaseMigrate();
+                JsonSettingsDeserializeAsync();
+                repository = new Repository();
+                chromeDriver = new ChromeDriver(Directory.GetCurrentDirectory());
+                botForMercury = BotForMercury.RenderBotForMercury(repository, chromeDriver, botSettings);
                 ShowLogo();
                 botForMercury.Start();
             }
@@ -38,31 +38,25 @@ namespace ConsoleProject {
             }
         }
 
+        static async void JsonSettingsDeserializeAsync() {
+            using(FileStream fileStream = new FileStream("botSettings.json", FileMode.OpenOrCreate)) {
+                botSettings = await JsonSerializer.DeserializeAsync<BotSettings>(fileStream);
+            }
+        }
+
         private static void ShowLogo() {
-            Console.Write(@"
-                          _       _           __  __               
-                    /\   | |     | |         |  \/  |              
-                   /  \  | |_ __ | |__   __ _| \  / | ___ _ __ ___ 
-                  / /\ \ | | '_ \| '_ \ / _` | |\/| |/ _ \ '__/ __|
-                 / ____ \| | |_) | | | | (_| | |  | |  __/ | | (__ 
-                /_/    \_\_| .__/|_| |_|\__,_|_|  |_|\___|_|  \___|
-                           | |                                     
-                           |_|                                                
-                                    
-                ");
+            using(StreamReader stringReader = new StreamReader("logo.txt")) {
+                Console.WriteLine(stringReader.ReadToEnd());
+            }
         }
 
         private static void ExceptionHandling(Exception exception) {
             bool isInternetError = exception.Message.Contains("ERR_INTERNET");
             if(isInternetError) {
-                ConsoleTextColor.RedConsoleOutput("Проблема с интернетом");
-
+                ConsoleTextColor.ColoringInRed("Проблема с интернетом");
             }else {
-                ConsoleTextColor.RedConsoleOutput(exception.Message);
+                ConsoleTextColor.ColoringInRed(exception.Message);
             }
         }
     }
-
-
-
 }

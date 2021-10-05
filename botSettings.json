@@ -1,0 +1,41 @@
+{
+    "millisecondsTimeout":1500,
+
+    "siteName":"http://mercury.vetrf.ru/gve",
+
+    "accountNameFromSiteXpath":"//div[@id=\u0027loggedas\u0027]/b",
+
+    "userNameInputElementXpath":"//input[@id=\u0027username\u0027]",
+
+    "passwordInputElementXpath":"//input[@id=\u0027password\u0027]",
+
+    "authorizationSubmitButtonXpath":"//button[@type=\u0027submit\u0027]",
+
+    "milkmanInHtmlPageXpath":"//input[@value=\u0027{0}\u0027]",
+
+    "milkmanSelectonButtonXpath":"//button[@type=\u0027submit\u0027]",
+
+    "transactionButtonXpath":"//a[@href=\u0027operatorui?_action=listTransaction\u0026formed=false\u0026pageList=1\u0026all=true\u0026preview=true\u0027]",
+
+    "templateButtonXpath":"//a[@href=\u0027javascript:onEnterMenu(true, \u0022\u0022, false);\u0027]",
+
+    "magniferImageButtonXpath":"//tr[@class=\u0027first\u0027]/td[@class=\u0027control\u0027]",
+
+    "editProductButtonXpath":"//a[@class=\u0027operation-link blue\u0027]",
+
+    "productionDayXpath":"//table[@class=\u0027innerForm\u0027]/tbody/tr[@id=\u0027PRODUCTION_DATE\u0027]/td/div/span/input[@type=\u0027text\u0027]",
+
+    "productionMonthXpath":"//tr[@id=\u0027PRODUCTION_DATE\u0027]/td/div/span/select[@class=\u0027middle\u0027]",
+
+    "expirationDayXpath":"//table[@class=\u0027innerForm\u0027]/tbody/tr[@id=\u0027BEST_BEFORE_DATE\u0027]/td/div/span/input[@type=\u0027text\u0027]",
+
+    "expirationMonthXpath":"//tr[@id=\u0027BEST_BEFORE_DATE\u0027]/td/div/span/select[@class=\u0027middle\u0027]",
+
+    "saveTemplateButton":"//button[@class=\u0027positive\u0027]",
+
+    "createTransactionButtonXpath":"//table[@class=\u0027form\u0027]/tbody/tr/td[@class=\u0027control\u0027]/div/button[3]",
+
+    "formalizeButtonXpath":"//button[@class=\u0027positive\u0027]",
+    
+    "changeServicedEnterpriseLink":"//a[@href=\u0027operatorui?_action=changeServicedEnterprise\u0027]"
+}
