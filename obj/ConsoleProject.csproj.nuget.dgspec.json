@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "/home/codename/Visual_Studio_Project/ConsoleProject/ConsoleProject.csproj": {}
+    "C:\\Users\\Ильназ\\Documents\\AlphaMerc\\ConsoleProject.csproj": {}
   },
   "projects": {
-    "/home/codename/Visual_Studio_Project/ConsoleProject/ConsoleProject.csproj": {
+    "C:\\Users\\Ильназ\\Documents\\AlphaMerc\\ConsoleProject.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/codename/Visual_Studio_Project/ConsoleProject/ConsoleProject.csproj",
+        "projectUniqueName": "C:\\Users\\Ильназ\\Documents\\AlphaMerc\\ConsoleProject.csproj",
         "projectName": "ConsoleProject",
-        "projectPath": "/home/codename/Visual_Studio_Project/ConsoleProject/ConsoleProject.csproj",
-        "packagesPath": "/home/codename/.nuget/packages/",
-        "outputPath": "/home/codename/Visual_Studio_Project/ConsoleProject/obj/",
+        "projectPath": "C:\\Users\\Ильназ\\Documents\\AlphaMerc\\ConsoleProject.csproj",
+        "packagesPath": "C:\\Users\\Ильназ\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Ильназ\\Documents\\AlphaMerc\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "/usr/share/dotnet/sdk/NuGetFallbackFolder"
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "/home/codename/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\Ильназ\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "netcoreapp2.1"

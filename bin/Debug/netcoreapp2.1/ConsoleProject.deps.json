@@ -1,7 +1,7 @@
 {
   "runtimeTarget": {
     "name": ".NETCoreApp,Version=v2.1",
-    "signature": "0a258fcb3e46aeb16dea9f3d0f541375e3ddf2be"
+    "signature": "46a1c89ef79ebeb548999ec71b919d34ce3434f9"
   },
   "compilationOptions": {},
   "targets": {
@@ -14,7 +14,7 @@
           "Microsoft.EntityFrameworkCore.Tools": "3.1.17",
           "Selenium.Support": "3.141.0",
           "Selenium.WebDriver": "3.141.0",
-          "Selenium.WebDriver.ChromeDriver": "91.0.4472.10100"
+          "Selenium.WebDriver.ChromeDriver": "95.0.4638.1700"
         },
         "runtime": {
           "ConsoleProject.dll": {}
@@ -329,7 +329,7 @@
           }
         }
       },
-      "Selenium.WebDriver.ChromeDriver/91.0.4472.10100": {},
+      "Selenium.WebDriver.ChromeDriver/95.0.4638.1700": {},
       "SQLitePCLRaw.bundle_e_sqlite3/2.0.2": {
         "dependencies": {
           "SQLitePCLRaw.core": "2.0.2",
@@ -601,7 +601,7 @@
         "runtime": {
           "lib/netcoreapp2.0/System.Runtime.CompilerServices.Unsafe.dll": {
             "assemblyVersion": "4.0.6.0",
-            "fileVersion": "4.0.0.0"
+            "fileVersion": "4.700.20.12001"
           }
         }
       },
@@ -944,12 +944,12 @@
       "path": "selenium.webdriver/3.141.0",
       "hashPath": "selenium.webdriver.3.141.0.nupkg.sha512"
     },
-    "Selenium.WebDriver.ChromeDriver/91.0.4472.10100": {
+    "Selenium.WebDriver.ChromeDriver/95.0.4638.1700": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-RalhItuJ6BZdD9HHVUHdpgDP/NQAUrr1yEAHWet+Ww33wbcuei0A2sF4+9duKaLQuZO3lcid7pKe2+km3sOGBQ==",
-      "path": "selenium.webdriver.chromedriver/91.0.4472.10100",
-      "hashPath": "selenium.webdriver.chromedriver.91.0.4472.10100.nupkg.sha512"
+      "sha512": "sha512-RuziiapHW2Yhw77AuvWmACzPOjjw7QdoSh9rhXxB+brO5ihsJE4V3xVY7tYX1VxKJOjRjB6ITAzmavlA1StkGw==",
+      "path": "selenium.webdriver.chromedriver/95.0.4638.1700",
+      "hashPath": "selenium.webdriver.chromedriver.95.0.4638.1700.nupkg.sha512"
     },
     "SQLitePCLRaw.bundle_e_sqlite3/2.0.2": {
       "type": "package",

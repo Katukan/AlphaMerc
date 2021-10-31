@@ -9,3 +9,14 @@
 /home/codename/Visual_Studio_Project/ConsoleProject/obj/Debug/netcoreapp2.1/ConsoleProject.AssemblyInfo.cs
 /home/codename/Visual_Studio_Project/ConsoleProject/obj/Debug/netcoreapp2.1/ConsoleProject.dll
 /home/codename/Visual_Studio_Project/ConsoleProject/obj/Debug/netcoreapp2.1/ConsoleProject.pdb
+C:\Users\Ильназ\Documents\AlphaMerc\bin\Debug\netcoreapp2.1\ConsoleProject.deps.json
+C:\Users\Ильназ\Documents\AlphaMerc\bin\Debug\netcoreapp2.1\ConsoleProject.runtimeconfig.json
+C:\Users\Ильназ\Documents\AlphaMerc\bin\Debug\netcoreapp2.1\ConsoleProject.runtimeconfig.dev.json
+C:\Users\Ильназ\Documents\AlphaMerc\bin\Debug\netcoreapp2.1\ConsoleProject.dll
+C:\Users\Ильназ\Documents\AlphaMerc\bin\Debug\netcoreapp2.1\ConsoleProject.pdb
+C:\Users\Ильназ\Documents\AlphaMerc\obj\Debug\netcoreapp2.1\ConsoleProject.csprojAssemblyReference.cache
+C:\Users\Ильназ\Documents\AlphaMerc\obj\Debug\netcoreapp2.1\ConsoleProject.AssemblyInfoInputs.cache
+C:\Users\Ильназ\Documents\AlphaMerc\obj\Debug\netcoreapp2.1\ConsoleProject.AssemblyInfo.cs
+C:\Users\Ильназ\Documents\AlphaMerc\obj\Debug\netcoreapp2.1\ConsoleProject.csproj.CoreCompileInputs.cache
+C:\Users\Ильназ\Documents\AlphaMerc\obj\Debug\netcoreapp2.1\ConsoleProject.dll
+C:\Users\Ильназ\Documents\AlphaMerc\obj\Debug\netcoreapp2.1\ConsoleProject.pdb

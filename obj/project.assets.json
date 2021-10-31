@@ -577,7 +577,7 @@
           "lib/netstandard2.0/WebDriver.dll": {}
         }
       },
-      "Selenium.WebDriver.ChromeDriver/91.0.4472.10100": {
+      "Selenium.WebDriver.ChromeDriver/95.0.4638.1700": {
         "type": "package",
         "build": {
           "build/Selenium.WebDriver.ChromeDriver.targets": {}
@@ -2263,10 +2263,10 @@
         "selenium.webdriver.nuspec"
       ]
     },
-    "Selenium.WebDriver.ChromeDriver/91.0.4472.10100": {
-      "sha512": "RalhItuJ6BZdD9HHVUHdpgDP/NQAUrr1yEAHWet+Ww33wbcuei0A2sF4+9duKaLQuZO3lcid7pKe2+km3sOGBQ==",
+    "Selenium.WebDriver.ChromeDriver/95.0.4638.1700": {
+      "sha512": "RuziiapHW2Yhw77AuvWmACzPOjjw7QdoSh9rhXxB+brO5ihsJE4V3xVY7tYX1VxKJOjRjB6ITAzmavlA1StkGw==",
       "type": "package",
-      "path": "selenium.webdriver.chromedriver/91.0.4472.10100",
+      "path": "selenium.webdriver.chromedriver/95.0.4638.1700",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -2277,7 +2277,7 @@
         "driver/mac64/chromedriver",
         "driver/win32/chromedriver.exe",
         "nupkg-icon.png",
-        "selenium.webdriver.chromedriver.91.0.4472.10100.nupkg.sha512",
+        "selenium.webdriver.chromedriver.95.0.4638.1700.nupkg.sha512",
         "selenium.webdriver.chromedriver.nuspec"
       ]
     },
@@ -4524,23 +4524,23 @@
     ]
   },
   "packageFolders": {
-    "/home/codename/.nuget/packages/": {},
-    "/usr/share/dotnet/sdk/NuGetFallbackFolder": {}
+    "C:\\Users\\Ильназ\\.nuget\\packages\\": {},
+    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/codename/Visual_Studio_Project/ConsoleProject/ConsoleProject.csproj",
+      "projectUniqueName": "C:\\Users\\Ильназ\\Documents\\AlphaMerc\\ConsoleProject.csproj",
       "projectName": "ConsoleProject",
-      "projectPath": "/home/codename/Visual_Studio_Project/ConsoleProject/ConsoleProject.csproj",
-      "packagesPath": "/home/codename/.nuget/packages/",
-      "outputPath": "/home/codename/Visual_Studio_Project/ConsoleProject/obj/",
+      "projectPath": "C:\\Users\\Ильназ\\Documents\\AlphaMerc\\ConsoleProject.csproj",
+      "packagesPath": "C:\\Users\\Ильназ\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Ильназ\\Documents\\AlphaMerc\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
-        "/usr/share/dotnet/sdk/NuGetFallbackFolder"
+        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "/home/codename/.nuget/NuGet/NuGet.Config"
+        "C:\\Users\\Ильназ\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "netcoreapp2.1"
